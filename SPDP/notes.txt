@@ -1,0 +1,4 @@
+P1/2 lineup format:
+[(Hero, HP, HPmax, EX, shield, strengthened/weakened, stun, fire, ice)]
+
+Strength/weakened mod is 1 for normal, 1.5 for strengthened, and .5 for weakened.
