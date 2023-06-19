@@ -1,5 +1,7 @@
 import math
 # ^This module is used in rounding, which happens mainly when a hero attacks in a weakened or bolstered state with an odd attack value that then becomes X.5 and could cause somebody being alive at .5 health.
+import random
+# ^This module is used for drawing cards so that they are not all in an order.
 
 hero_options = ['Squire', 'Markswoman', 'Apprentice', 'Priest'] #the name of the heros you can choose
 hero_options_static = [hero_options] #the same list as hero_options, but it doesn't change and is used as reference to reset hero options as needed during deck creation
@@ -27,7 +29,7 @@ P2FrontGear = 'Undefined'
 P2SecondGear = 'Undefined'
 P2ThirdGear = 'Undefined'
 P2BackGear = 'Undefined'
-# ^This is the lineup, i think it can be removed but im leaving it here until I code in a proper workaround that doesnt need them.
+# ^This is the lineup, i think it can be removed but im leaving it here until I code in a proper workaround that doesnt need them. not curently used but i think i need them for lineup building
 
 P1Deck = []
 P2Deck = []
@@ -70,7 +72,7 @@ P2BackHP = 0
 P2BackMaxHP = 0
 P2BackAT = 0
 P2BackEX = 0
-# ^These are the stats of each hero, which are probably also unnecessary but I'm leaving here until I get a workaround working.
+# ^These are the stats of each hero, which are probably also unnecessary but I'm leaving here until I get a workaround working. i think they are also needed for lineup building
 
 P1Lineup = []
 P2Lineup = []
@@ -102,8 +104,112 @@ print('')
 #             print("Sorry, but that's not an option. Check spelling and try again?")
 
 #until I have more heroes, I won't bother working on the lineup setup. Once that is added tho, these next few lines should be removed.
-
-P1Lineup = [('Squire', 100, 100, 0, 0, 1, 0, 0, 0), ('Markswoman', 90, 9, 0, 0, 1, 0, 0, 0), ('Apprentice', 80, 8, 0, 0, 1, 0, 0, 0), ('Preist', 70, 7, 0, 0, 1, 0, 0, 0)]
-P2Lineup = [('Squire', 100, 100, 0, 0, 1, 0, 0, 0), ('Markswoman', 90, 9, 0, 0, 1, 0, 0, 0), ('Apprentice', 80, 8, 0, 0, 1, 0, 0, 0), ('Preist', 70, 7, 0, 0, 1, 0, 0, 0)]
-#(Hero, HP, HPmax, EX, shield, strengthened/weakened, stun, fire, ice)
+P1Lineup = [('Squire', 100, 100, 0, 'Barrier Orb', 0, 0, 1, 0, 0, 0), ('Markswoman', 90, 9, 0, 'Reflux Glove', 0, 0, 1, 0, 0, 0), ('Apprentice', 80, 8, 0, 'Lightning Coil', 0, 0, 1, 0, 0, 0), ('Priest', 70, 7, 0, 'Fruit Of Life', 0, 0, 1, 0, 0, 0)]
+P2Lineup = [('Squire', 100, 100, 0, 0, 1, 0, 0, 0), ('Markswoman', 90, 9, 0, 0, 1, 0, 0, 0), ('Apprentice', 80, 8, 0, 0, 1, 0, 0, 0), ('Priest', 70, 7, 0, 0, 1, 0, 0, 0)]
+#(Hero, HP, HPmax, EX, Gear, Gear status(0 off, 1 on), shield, strengthened/weakened, stun, fire, ice)
 #strengthened/weakened is a multiplier, and so is either 1.5 or .5
+
+#Game start logic below
+print('Match start!')
+#Create P1's deck
+#Theres probably a better way to do this, but for now it checks if each slot is occupied by a certain hero, and if theyre there, adds the respective cards to the deck
+#Ideally id like to have something that reads the hero in the first slot, adds any card with that hero as the caster to the deck, and then moves on to the next one to repeat but i cant figure out how to make that work.
+counter = 0
+for item in P1Lineup:
+    if P1Lineup[counter][0] == 'Squire':
+        P1Deck.append('Defensive Stance')
+        P1Deck.append('Shield Block')
+        P1Deck.append('Overpower Strike')
+        P1Deck.append('Squire Attack')
+        P1Deck.append('Squire Attack')
+        P1Deck.append('Squire Attack')
+    counter += 1
+
+counter = 0
+for item in P1Lineup:
+    if P1Lineup[counter][0] == 'Markswoman':
+        P1Deck.append('Incendiary Shot')
+        P1Deck.append('Multiple Shots')
+        P1Deck.append('Aimed Shot')
+        P1Deck.append('Markswoman Attack')
+        P1Deck.append('Markswoman Attack')
+        P1Deck.append('Markswoman Attack')
+    counter += 1
+
+counter = 0
+for item in P1Lineup:
+    if P1Lineup[counter][0] == 'Apprentice':
+        P1Deck.append('Flame Scroll')
+        P1Deck.append('Ice Scroll')
+        P1Deck.append('Lightning Scroll')
+        P1Deck.append('Apprentice Attack')
+        P1Deck.append('Apprentice Attack')
+        P1Deck.append('Apprentice Attack')
+    counter += 1
+
+counter = 0
+for item in P1Lineup:
+    if P1Lineup[counter][0] == 'Priest':
+        P1Deck.append('Cleansing Touch')
+        P1Deck.append('Prayer of Healing')
+        P1Deck.append('healing Spell')
+        P1Deck.append('Priest Attack')
+        P1Deck.append('Priest Attack')
+        P1Deck.append('Priest Attack')
+    counter += 1
+
+#Create P2's deck
+counter = 0
+for item in P2Lineup:
+    if P2Lineup[counter][0] == 'Squire':
+        P2Deck.append('Defensive Stance')
+        P2Deck.append('Shield Block')
+        P2Deck.append('Overpower Strike')
+        P2Deck.append('Squire Attack')
+        P2Deck.append('Squire Attack')
+        P2Deck.append('Squire Attack')
+    counter += 1
+
+counter = 0
+for item in P2Lineup:
+    if P2Lineup[counter][0] == 'Markswoman':
+        P2Deck.append('Incendiary Shot')
+        P2Deck.append('Multiple Shots')
+        P2Deck.append('Aimed Shot')
+        P2Deck.append('Markswoman Attack')
+        P2Deck.append('Markswoman Attack')
+        P2Deck.append('Markswoman Attack')
+    counter += 1
+
+counter = 0
+for item in P2Lineup:
+    if P2Lineup[counter][0] == 'Apprentice':
+        P2Deck.append('Flame Scroll')
+        P2Deck.append('Ice Scroll')
+        P2Deck.append('Lightning Scroll')
+        P2Deck.append('Apprentice Attack')
+        P2Deck.append('Apprentice Attack')
+        P2Deck.append('Apprentice Attack')
+    counter += 1
+
+counter = 0
+for item in P2Lineup:
+    if P2Lineup[counter][0] == 'Priest':
+        P2Deck.append('Cleansing Touch')
+        P2Deck.append('Prayer of Healing')
+        P2Deck.append('healing Spell')
+        P2Deck.append('Priest Attack')
+        P2Deck.append('Priest Attack')
+        P2Deck.append('Priest Attack')
+    counter += 1
+
+#Draw hands
+for x in range (0, 5):
+    P1Hand.append(P1Deck.pop(random.randrange(0, len(P1Deck))))
+    P2Hand.append(P2Deck.pop(random.randrange(0, len(P2Deck))))
+#Add Leah's Coin to P2's hand
+P2Hand.append("Leah's Coin")
+
+#Start the game
+print('Game Start!')
+print('Player 1, it is your turn!')
