@@ -4,6 +4,10 @@ Probably rather buggy.
 
 Update log:
 
+6/27/2023
+Summary: Added clear debuffs step.
+Changed from last update: Cleared debuff step added. Changed () to [] in lists. I didn't know this, but apparently () is a 'tuple', whatever the heck that means, but it was causing problems and making it unchangeable for some reason. Making it [] instead let me change it around which is very important for things like health values and buff effects.
+
 6/21/2023
 Summary: Modded code to be functions for increased organization.
 Changed from last update: Changed the amount of attack cards added to the deck from 3 to 2, I had misremembered the amount in the deck but found the correct amount and fixed it. Changed code to be in functions. Added break/bolster variable to heros.
