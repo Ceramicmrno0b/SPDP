@@ -11,7 +11,7 @@ gear_options = ['Barrier Orb', 'Reflux Glove', 'Lightning Coil', 'Fruit Of Life'
 CardList =     [ 'Defensive Stance',                          'Shield Block',                  'Overpower Strike',                           'Squire Attack',                               'Incendiary Shot',                                 'Multiple Shots',                                  'Aimed Shot',                                  'Markswoman Attack',                              'Ice Scroll',                                                  'Flame Scroll',                                        'Lightning Scroll',                                          'Apprentice Attack',                              'Cleansing Touch',                                                           'Prayer of Healing',                  'Healing Spell',                               'Priest Attack']
 # ^Lists all the cards that can be used
 CardListDesc = [('Taunt self and draw a card', 0, 'Squire'), ('Shield self 40', 1, 'Squire'), ('15 damage and weaken target', 3, 'Squire'), ('Deal 10 damage to front hero', 0, 'Squire'), ('Deal 5 Fire damage to target', 1, 'Markswoman'), ('Deal 9 damage to all enemies', 2, 'Markswoman'), ('Deal 18 damage to target', 5, 'Markswoman'), ('Deal 9 damage to front hero', 0, 'Markswoman'), ('Deal 12 Frost damage to target; Volatile', 3, 'Apprentice'), ('Deal 12 Fire to target; Volatile', 3, 'Apprentice'), ('Deal 8 damage to all enemies; Volatile', 3, 'Apprentice'), ('Deal 8 damage to front hero', 0, 'Apprentice'), ('Dispel debuffs from an ally, or dispel buffs from an enemy', 1, 'Priest'), ('Heal all allies 11 health', 1, 'Priest'), ('Heal an ally 21 health', 1, 'Priest'), ('Deal 7 damage to the front hero', 0, 'Priest')]
-# ^Infor pertaining to all the cards that can be used. Arranged to match with the card names above. info is [(desc, mana cost, casting hero), (repeat)]
+# ^Info pertaining to all the cards that can be used. Arranged to match with the card names above. info is [(desc, mana cost, casting hero), (repeat)]
 
 P1Front = 'Undefined'
 P1Second = 'Undefined'
@@ -30,6 +30,9 @@ P2SecondGear = 'Undefined'
 P2ThirdGear = 'Undefined'
 P2BackGear = 'Undefined'
 # ^This is the lineup, i think it can be removed but im leaving it here until I code in a proper workaround that doesnt need them. not curently used but i think i need them for lineup building
+
+P1Mana = 0
+P2Mana = 0
 
 P1Deck = []
 P2Deck = []
@@ -104,9 +107,8 @@ print('')
 #             print("Sorry, but that's not an option. Check spelling and try again?")
 
 #until I have more heroes, I won't bother working on the lineup setup. Once that is added tho, these next few lines should be removed.
-P1Lineup = [('Squire', 100, 100, 0, 'Barrier Orb', 0, 0, 1, 1, 0, 0, 0), ('Markswoman', 90, 9, 0, 'Reflux Glove', 0, 0, 1, 1, 0, 0, 0), ('Apprentice', 80, 8, 0, 'Lightning Coil', 0, 0, 1, 1, 0, 0, 0), ('Priest', 70, 7, 0, 'Fruit Of Life', 0, 0, 1, 1, 0, 0, 0)]
-P2Lineup = [('Squire', 100, 100, 0, 'Barrier Orb', 0, 0, 1, 1, 0, 0, 0), ('Markswoman', 90, 9, 0, 'Reflux Glove', 0, 0, 1, 1, 0, 0, 0), ('Apprentice', 80, 8, 0, 'Lightning Coil', 0, 0, 1, 1, 0, 0, 0), ('Priest', 70, 7, 0, 'Fruit Of Life', 0, 0, 1, 1, 0, 0, 0)]
-#(Hero, HP, HPmax, EX, Gear, Gear status(0 off, 1 on), shield, empowered/weakened, broken/bolstered, stun, fire, ice)
+P1Lineup = [['Squire', 100, 100, 0, 'Barrier Orb', 0, 0, 1, 1, 0, 0, 0], ['Markswoman', 90, 9, 0, 'Reflux Glove', 0, 0, 1, 1, 0, 0, 0], ['Apprentice', 80, 8, 0, 'Lightning Coil', 0, 0, 1, 1, 0, 0, 0], ['Priest', 70, 7, 0, 'Fruit Of Life', 0, 0, 1, 1, 0, 0, 0]]
+P2Lineup = [['Squire', 100, 100, 0, 'Barrier Orb', 0, 0, 1, 1, 0, 0, 0], ['Markswoman', 90, 9, 0, 'Reflux Glove', 0, 0, 1, 1, 0, 0, 0], ['Apprentice', 80, 8, 0, 'Lightning Coil', 0, 0, 1, 1, 0, 0, 0], ['Priest', 70, 7, 0, 'Fruit Of Life', 0, 0, 1, 1, 0, 0, 0]]#(Hero, HP, HPmax, EX, Gear, Gear status(0 off, 1 on), shield, empowered/weakened, broken/bolstered, stun, fire, ice)
 #strengthened/weakened is a multiplier, and so is either 1.5 or .5
 #broken/bolstered is a multiplier, and so is either 1.5 or .5
 
@@ -195,30 +197,98 @@ def create_decks():
 def start_hands():
     #Draw hands
     for x in range (0, 5):
+        #I'm honestly not sure how this line works but it does somehow?
         P1Hand.append(P1Deck.pop(random.randrange(0, len(P1Deck))))
         P2Hand.append(P2Deck.pop(random.randrange(0, len(P2Deck))))
     #Add Leah's Coin to P2's hand
     P2Hand.append("Leah's Coin")
     #print('start_hands completed successfully')
 
+def P1Draw():
+    #Draws 5 cards for the start of P1's turn
+    for x in range (0, 5):
+        #Doesn't draw over 10 cards(I think, needs testing)
+        if len(P1Hand) <= 10:
+            P1Hand.append(P1Deck.pop(random.randrange(0, len(P1Deck))))
+
+def P2Draw():
+    #Draws 5 cards for the start of P2's turn
+    for x in range (0, 5):
+        #Doesn't draw over 10 cards(I think, needs testing)
+        if len(P2Hand) <= 10:
+            P2Hand.append(P2Deck.pop(random.randrange(0, len(P2Deck))))
+
+def P1ClearDebuffs():
+    if P1Lineup[0][7] == .5:
+        P1Lineup[0][7] = 1
+    if P1Lineup[0][8] == .5:
+        P1Lineup[0][8] = 1
+    if P1Lineup[1][7] == .5:
+        P1Lineup[1][7] = 1
+    if P1Lineup[1][8] == .5:
+        P1Lineup[1][8] = 1
+    if P1Lineup[2][7] == .5:
+        P1Lineup[2][7] = 1
+    if P1Lineup[2][8] == .5:
+        P1Lineup[2][8] = 1
+    if P1Lineup[3][7] == .5:
+        P1Lineup[3][7] = 1
+    if P1Lineup[3][8] == .5:
+        P1Lineup[3][8] = 1
+    #reset weakened and broken
+    for x in range (0, 3):
+        P1Lineup[0-3][9] = 0
+    #reset stun
+    #Need to figure out how to differentiate ice stages
+    print('cleared debuffs')
+
+def P2ClearDebuffs():
+    if P2Lineup[0][7] == .5:
+        P2Lineup[0][7] = 1
+    if P2Lineup[0][8] == .5:
+        P2Lineup[0][8] = 1
+    if P2Lineup[1][7] == .5:
+        P2Lineup[1][7] = 1
+    if P2Lineup[1][8] == .5:
+        P2Lineup[1][8] = 1
+    if P2Lineup[2][7] == .5:
+        P2Lineup[2][7] = 1
+    if P2Lineup[2][8] == .5:
+        P2Lineup[2][8] = 1
+    if P2Lineup[3][7] == .5:
+        P2Lineup[3][7] = 1
+    if P2Lineup[3][8] == .5:
+        P2Lineup[3][8] = 1
+    #reset weakened and broken
+    for x in range (0, 3):
+        P1Lineup[0-3][9] = 0
+    #reset stun
+    #Need to figure out how to differentiate ice stages
 
 
 def gameplay():
     create_decks()
     start_hands()
+    P1Mana = 3
+    P2Mana = 3
     #setup completed
     #main turn logic first turn unique steps
 
     #main turn logic loop
-    #while True needs to change to while end? = False or smthn like that
+    #while True needs to change to while Game Over = False or smthn like that
     while True:
         print('Not yet added.')
+        #P1 draw 5 cards, not on 1st turn
+        #P1 mana go up, not on 1st turn
+        #Buffs leave
+        #Turn start triggers
+        #Player take actions
+        #Turn end triggers
+        #Debuffs leave
+        P1ClearDebuffs()
+        #Check game end between each step
         break
-        #P1 draw card
-        #P1 mana go up
-        #Turn start triggers and check game end(ie did fire kill last hero?)
-        #Player take actions and check game end after each(ie counter damage killed your hero, or you killed last enemy hero?)
-        #Turn end triggers and check game end(ie did delay damage killed last hero)
+        #P2 steps go here
     #print('main completed successfully')
 
 gameplay()
