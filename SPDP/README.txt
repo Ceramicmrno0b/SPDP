@@ -4,6 +4,11 @@ Probably rather buggy.
 
 Update log:
 
+7/19/2023
+Summary: Preemptive bug fixes and casting work.
+Changed from last update: Seperated deck creation to P1 and P2 creations so that the deck can refresh at empty without needing an extra set of functions.
+CardListAttributes list created, which should make it casting cards easy once I get the interpretation code prepared.
+
 6/27/2023
 Summary: Added clear debuffs step.
 Changed from last update: Cleared debuff step added. Changed () to [] in lists. I didn't know this, but apparently () is a 'tuple', whatever the heck that means, but it was causing problems and making it unchangeable for some reason. Making it [] instead let me change it around which is very important for things like health values and buff effects.

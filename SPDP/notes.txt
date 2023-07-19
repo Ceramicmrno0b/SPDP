@@ -4,3 +4,11 @@ P1/2 lineup format:
 Strength/weakened mod is 1 for normal, 1.5 for strengthened, and .5 for weakened.
 bolster/break mod is .5 for bolster, 1 for normal, 1.5 for break.
 Gear status is 0 for unequipped and 1 for equipped.
+
+CardListAttributes = [(Card 1), (Card 2), (etc)]
+(Card) = (Target, Damage mod, effect, misc,)
+Target = 0 for no target, 1 for target front(ie attack), 2 for target enemy choice, 3 for target ally choice, 4 for target any choice, 5 for random enemy, 6 for random ally, 7 for random all, 8 for all target, 9 for all enemy, 10 for all ally, 11 for self
+Damage mod = the multiplier to apply to the base damage stat when dealing damage. Negative multipliers will be heals. 0 if no damage.
+effect = what effects apply. 0 is none, 1 for fire, 2 for ice, 3 for shield, 4 for taunt, 5 for stun, 6 clears buffs/debuffs, 7 weakens, 
+misc = 0 is none, 1 is draw
+

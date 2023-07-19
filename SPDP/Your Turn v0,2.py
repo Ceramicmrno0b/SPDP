@@ -8,10 +8,12 @@ hero_options_static = [hero_options] #the same list as hero_options, but it does
 hero_stats =   [(100, 10), (90, 9), (80, 8), (70, 7)] # The max hp and attack value of the heroes. each () is one hero [(hp, attack), (hp, attack),...]
 gear_options = ['Barrier Orb', 'Reflux Glove', 'Lightning Coil', 'Fruit Of Life'] # gears availilble for the heros to use
 
-CardList =     [ 'Defensive Stance',                          'Shield Block',                  'Overpower Strike',                           'Squire Attack',                               'Incendiary Shot',                                 'Multiple Shots',                                  'Aimed Shot',                                  'Markswoman Attack',                              'Ice Scroll',                                                  'Flame Scroll',                                        'Lightning Scroll',                                          'Apprentice Attack',                              'Cleansing Touch',                                                           'Prayer of Healing',                  'Healing Spell',                               'Priest Attack']
+CardList =     [ 'Defensive Stance',                          'Shield Block',                  'Overpower Strike',                           'Squire Attack',                               'Incendiary Shot',                                 'Multiple Shots',                                  'Aimed Shot',                                  'Markswoman Attack',                              'Ice Scroll',                                                  'Flame Scroll',                                        'Lightning Scroll',                                          'Apprentice Attack',                              'Cleansing Touch',                                                           'Prayer of Healing',                        'Healing Spell',                         'Priest Attack']
 # ^Lists all the cards that can be used
 CardListDesc = [('Taunt self and draw a card', 0, 'Squire'), ('Shield self 40', 1, 'Squire'), ('15 damage and weaken target', 3, 'Squire'), ('Deal 10 damage to front hero', 0, 'Squire'), ('Deal 5 Fire damage to target', 1, 'Markswoman'), ('Deal 9 damage to all enemies', 2, 'Markswoman'), ('Deal 18 damage to target', 5, 'Markswoman'), ('Deal 9 damage to front hero', 0, 'Markswoman'), ('Deal 12 Frost damage to target; Volatile', 3, 'Apprentice'), ('Deal 12 Fire to target; Volatile', 3, 'Apprentice'), ('Deal 8 damage to all enemies; Volatile', 3, 'Apprentice'), ('Deal 8 damage to front hero', 0, 'Apprentice'), ('Dispel debuffs from an ally, or dispel buffs from an enemy', 1, 'Priest'), ('Heal all allies 11 health', 1, 'Priest'), ('Heal an ally 21 health', 1, 'Priest'), ('Deal 7 damage to the front hero', 0, 'Priest')]
 # ^Info pertaining to all the cards that can be used. Arranged to match with the card names above. info is [(desc, mana cost, casting hero), (repeat)]
+CardListAttributes = [(11, 0, 4, 1),                           (11, 5, 3, 0),                   (2, 1.5, 7, 0),                              (1, 1, 0, 0),                                  (2, 0.5, 1, 0),                                    (9, 1, 0, 0),                                      (2, 2, 0, 0),                                  (1, 1, 0, 0),                                     (2, 1.5, 2, 0),                                                  (2, 1.5, 1, 0),                                      (9, 1, 0, 0),                                                (1, 1, 0, 0),                                     (4, 0, 6, 0),                                                                (10, -1.5, 0, 0),                           (3, -3, 0, 0),                           (1, 1, 0, 0)]
+#(Target, Damage mod, effect, misc,)
 
 P1Front = 'Undefined'
 P1Second = 'Undefined'
@@ -118,7 +120,7 @@ P2Lineup = [['Squire', 100, 100, 0, 'Barrier Orb', 0, 0, 1, 1, 0, 0, 0], ['Marks
 #Theres probably a better way to do this, but for now it checks if each slot is occupied by a certain hero, and if theyre there, adds the respective cards to the deck
 #Ideally id like to have something that reads the hero in the first slot, adds any card with that hero as the caster to the deck, and then moves on to the next one to repeat but i cant figure out how to make that work.
 
-def create_decks():
+def create_P1_deck():
     counter = 0
     for item in P1Lineup:
         if P1Lineup[counter][0] == 'Squire':
@@ -155,7 +157,8 @@ def create_decks():
             P1Deck.append('Priest Attack')
             P1Deck.append('Priest Attack')
         counter += 1
-    #Create P2's deck
+
+def create_P2_deck():
     counter = 0
     for item in P2Lineup:
         if P2Lineup[counter][0] == 'Squire':
@@ -208,12 +211,16 @@ def P1Draw():
     #Draws 5 cards for the start of P1's turn
     for x in range (0, 5):
         #Doesn't draw over 10 cards(I think, needs testing)
+        if len(P1Deck) == 0:
+            create_P1_deck()
         if len(P1Hand) <= 10:
             P1Hand.append(P1Deck.pop(random.randrange(0, len(P1Deck))))
 
 def P2Draw():
     #Draws 5 cards for the start of P2's turn
     for x in range (0, 5):
+        if len(P2Deck) == 0:
+            create_P2_deck()
         #Doesn't draw over 10 cards(I think, needs testing)
         if len(P2Hand) <= 10:
             P2Hand.append(P2Deck.pop(random.randrange(0, len(P2Deck))))
@@ -267,7 +274,8 @@ def P2ClearDebuffs():
 
 
 def gameplay():
-    create_decks()
+    create_P1_deck()
+    create_P2_deck()
     start_hands()
     P1Mana = 3
     P2Mana = 3
